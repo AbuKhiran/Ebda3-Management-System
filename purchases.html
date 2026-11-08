@@ -3,320 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المشتريات والمصروفات - شبكة إبداع</title>
-    <!-- Tailwind CSS -->
+    <title>المشتريات والمصروفات - شبكة إبداع</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Cairo', sans-serif; } </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header Navigation -->
     <header class="bg-slate-900 text-white shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl font-bold text-lg shadow"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                 <div>
                     <h1 class="text-lg font-bold">شبكة إبداع للاتصالات</h1>
-                    <p class="text-xs text-slate-400">إدارة المصروفات والمشتريات</p>
+                    <p class="text-xs text-slate-400">إدارة المصروفات وربط القطع</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <a href="towers.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
-                    <i class="fa-solid fa-tower-broadcast ml-1"></i> الأبراج
-                </a>
-                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
-                    <i class="fa-solid fa-arrow-right ml-1"></i> الرئيسية
-                </a>
-            </div>
+            <a href="towers.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <i class="fa-solid fa-tower-broadcast ml-1"></i> الأبراج
+            </a>
         </div>
     </header>
 
-    <!-- Main Container -->
     <main class="container mx-auto px-6 py-8 flex-grow space-y-8">
-        
-        <!-- Top Action & Title Bar -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div>
-                <h2 class="text-2xl font-extrabold text-slate-900">سجل المصروفات والمشتريات</h2>
-                <p class="text-xs text-slate-500 mt-1">تتبع تكاليف القطع، السويتشات، الكوابل، وربطها بالأبراج أو النقاط</p>
+                <h2 class="text-2xl font-extrabold text-slate-900">سجل القطع والمصروفات</h2>
+                <p class="text-xs text-slate-500 mt-1">ربط كل قطعة ببرج واحد فقط</p>
             </div>
             <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> إضافة مصروف أو قطعة جديدة
+                <i class="fa-solid fa-plus"></i> إضافة قطعة أو مصروف
             </button>
         </div>
 
-        <!-- KPI Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">إجمالي بنود المصروفات</p>
-                    <h3 class="text-3xl font-extrabold text-slate-900 mt-2" id="stat-count">0</h3>
-                </div>
-                <div class="bg-blue-50 text-blue-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-receipt"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">إجمالي التكاليف المدفوعة</p>
-                    <h3 class="text-3xl font-extrabold text-rose-600 mt-2" id="stat-total-amount">0 ₪</h3>
-                </div>
-                <div class="bg-rose-50 text-rose-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-wallet"></i></div>
-            </div>
-        </div>
-
-        <!-- Data Table Section -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 class="font-bold text-slate-800 text-base">سجل المشتريات المرتبطة وغير المرتبطة</h3>
-                <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1">
-                    <i class="fa-solid fa-file-excel"></i> تصدير إكسل
-                </button>
-            </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-right border-collapse text-sm">
-                    <thead class="bg-slate-100/70 text-slate-600 text-xs uppercase">
+                    <thead class="bg-slate-100 text-slate-600 text-xs uppercase">
                         <tr>
-                            <th class="p-4">البند / القطعة</th>
+                            <th class="p-4">البند</th>
                             <th class="p-4">التصنيف</th>
-                            <th class="p-4">البرج / النقطة المرتبطة</th>
+                            <th class="p-4">البرج المرتبط</th>
                             <th class="p-4">التكلفة</th>
-                            <th class="p-4">تاريخ الشراء</th>
+                            <th class="p-4">التاريخ</th>
                             <th class="p-4">ملاحظات</th>
-                            <th class="p-4 text-center">الإجراءات</th>
+                            <th class="p-4 text-center">إجراء</th>
                         </tr>
                     </thead>
-                    <tbody id="purchases-table-body" class="divide-y divide-slate-100">
-                        <!-- تملأ ديناميكياً -->
-                    </tbody>
+                    <tbody id="purchases-table-body" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
         </div>
-
     </main>
 
-    <!-- Add / Edit Modal -->
+    <!-- Modal -->
     <div id="purchase-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="modal-title" class="text-lg font-bold text-slate-900">إضافة مصروف أو قطعة جديدة</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <input type="hidden" id="edit-id">
-            <div class="space-y-4 text-sm">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-3">إضافة بند جديد</h3>
+            <div class="space-y-3 text-sm">
+                <input type="hidden" id="edit-id">
                 <div>
                     <label class="block text-slate-600 font-semibold mb-1">اسم البند أو القطعة:</label>
-                    <input type="text" id="item_name" placeholder="مثال: سويتش 8 بورت / كرتونة كوابل / كبسات" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                    <input type="text" id="item_name" placeholder="مثال: سويتش 8 بورت" class="w-full border rounded-xl p-3 bg-slate-50">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-slate-600 font-semibold mb-1">التصنيف:</label>
-                        <select id="category" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                        <select id="category" class="w-full border rounded-xl p-3 bg-slate-50">
                             <option value="معدات ونقاط">معدات ونقاط بث</option>
-                            <option value="صيانة وكاتب">صيانة وكوابل وكسوة</option>
+                            <option value="صيانة وكاتب">صيانة وكسوة</option>
                             <option value="اشتراك مزود">اشتراك مزود الإنترنت</option>
-                            <option value="أخرى">أخرى</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-slate-600 font-semibold mb-1">التكلفة (شيكل):</label>
-                        <input type="number" id="amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                        <label class="block text-slate-600 font-semibold mb-1">التكلفة (₪):</label>
+                        <input type="number" id="amount" placeholder="0.00" class="w-full border rounded-xl p-3 bg-slate-50">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-slate-600 font-semibold mb-1">ربط ببرج أو نقطة محددة (اختياري):</label>
-                    <select id="tower_id" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
-                        <option value="">-- بدون ربط (مصروف عام للشبكة) --</option>
-                        <!-- تعبأ ديناميكياً من جدول الأبراج -->
+                    <label class="block text-slate-600 font-semibold mb-1">البرج أو النقطة المرتبطة:</label>
+                    <select id="tower_id" class="w-full border rounded-xl p-3 bg-slate-50">
+                        <option value="">-- بدون ربط (مصروف عام) --</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-slate-600 font-semibold mb-1">تاريخ الشراء:</label>
-                    <input type="date" id="purchase_date" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
-                </div>
-                <div>
-                    <label class="block text-slate-600 font-semibold mb-1">ملاحظات إضافية:</label>
-                    <input type="text" id="notes" placeholder="ملاحظات الفاتورة أو التاجر..." class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                    <label class="block text-slate-600 font-semibold mb-1">ملاحظات:</label>
+                    <input type="text" id="notes" placeholder="ملاحظات..." class="w-full border rounded-xl p-3 bg-slate-50">
                 </div>
             </div>
-            <div class="flex gap-3 pt-3 border-t">
-                <button onclick="savePurchase()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow">حفظ المصروف</button>
-                <button onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold text-sm transition">إلغاء</button>
+            <div class="flex gap-2 pt-2 border-t">
+                <button onclick="savePurchase()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold">حفظ</button>
+                <button onclick="closeModal()" class="bg-gray-100 text-slate-700 px-5 py-3 rounded-xl font-semibold">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- Application Script Linked with Supabase -->
     <script type="module">
         import { supabase } from './assets/js/supabase.js';
 
-        let purchasesData = [];
-        let towersList = [];
-
-        async function initPage() {
-            await fetchTowersDropdown();
-            await fetchPurchases();
-        }
-
-        async function fetchTowersDropdown() {
-            try {
-                let { data, error } = await supabase.from('towers').select('id, name, location_type');
-                if(!error && data) {
-                    towersList = data;
-                    let select = document.getElementById('tower_id');
-                    select.innerHTML = '<option value="">-- بدون ربط (مصروف عام للشبكة) --</option>' + 
-                        data.map(t => `<option value="${t.id}">${t.name} (${t.location_type === 'main_tower' ? 'برج رئيسي' : 'نقطة مشتركين'})</option>`).join('');
-                }
-            } catch(e) {
-                console.log("جاري استخدام بيانات أبراج افتراضية للاختبار");
-                towersList = [
-                    { id: '1', name: 'البرج الرئيسي', location_type: 'main_tower' },
-                    { id: '2', name: 'نقطة الرهوة', location_type: 'sub_point' }
-                ];
-                let select = document.getElementById('tower_id');
-                select.innerHTML = '<option value="">-- بدون ربط (مصروف عام للشبكة) --</option>' + 
-                    towersList.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        async function init() {
+            let { data: towers } = await supabase.from('towers').select('id, name');
+            if(towers) {
+                document.getElementById('tower_id').innerHTML = '<option value="">-- بدون ربط (مصروف عام) --</option>' + 
+                    towers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
             }
+            fetchPurchases();
         }
 
         async function fetchPurchases() {
-            try {
-                let { data, error } = await supabase.from('purchases').select('*, towers(name, location_type)').order('purchase_date', { ascending: false });
-                if (error) throw error;
-                purchasesData = data || [];
-                renderUI();
-            } catch (err) {
-                console.error("خطأ في جلب المشتريات:", err.message);
-                purchasesData = [
-                    { id: '1', item_name: 'اشتراك الانترنت الرئيسي', category: 'اشتراك مزود', amount: 960, purchase_date: '2026-06-01', notes: 'مزود الخدمة الأساسي', towers: null },
-                    { id: '2', item_name: 'سويتش 8 بورت', category: 'معدات ونقاط', amount: 120, purchase_date: '2026-06-05', notes: 'تم تركيبه بالنقطة', towers: { name: 'نقطة الرهوة', location_type: 'sub_point' } }
-                ];
-                renderUI();
-            }
-        }
-
-        window.renderUI = function() {
+            let { data, error } = await supabase.from('purchases').select('*, towers(name)').order('purchase_date', { ascending: false });
             let tbody = document.getElementById('purchases-table-body');
-            let totalAmount = 0;
-
-            if (purchasesData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">لا توجد مصروفات مسجلة حالياً.</td></tr>`;
+            if(!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">لا توجد مصروفات مسجلة.</td></tr>`;
                 return;
             }
-
-            tbody.innerHTML = purchasesData.map(p => {
-                totalAmount += Number(p.amount || 0);
-                let towerBadge = p.towers ? `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-tower-broadcast ml-1"></i>${p.towers.name}</span>` : `<span class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full text-xs font-semibold">مصروف عام</span>`;
-
-                return `
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="p-4 font-bold text-slate-900">${p.item_name}</td>
-                        <td class="p-4 text-slate-600 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded font-semibold">${p.category}</span></td>
-                        <td class="p-4">${towerBadge}</td>
-                        <td class="p-4 font-extrabold text-rose-600">${Number(p.amount).toLocaleString()} ₪</td>
-                        <td class="p-4 text-slate-500 text-xs">${p.purchase_date || '-'}</td>
-                        <td class="p-4 text-slate-500 text-xs">${p.notes || '-'}</td>
-                        <td class="p-4 text-center space-x-2 space-x-reverse">
-                            <button onclick="editPurchase('${p.id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deletePurchase('${p.id}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            document.getElementById('stat-count').innerText = purchasesData.length;
-            document.getElementById('stat-total-amount').innerText = totalAmount.toLocaleString() + ' ₪';
+            tbody.innerHTML = data.map(p => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-4 font-bold">${p.item_name}</td>
+                    <td class="p-4 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">${p.category}</span></td>
+                    <td class="p-4">${p.towers ? `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">${p.towers.name}</span>` : '<span class="text-slate-400">عام</span>'}</td>
+                    <td class="p-4 font-extrabold text-rose-600">${p.amount} ₪</td>
+                    <td class="p-4 text-xs text-slate-500">${p.purchase_date}</td>
+                    <td class="p-4 text-xs text-slate-500">${p.notes || '-'}</td>
+                    <td class="p-4 text-center"><button onclick="deletePurchase('${p.id}')" class="bg-rose-50 text-rose-600 px-3 py-1 rounded text-xs font-semibold">حذف</button></td>
+                </tr>
+            `).join('');
         }
 
-        window.openModal = function() {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('item_name').value = '';
-            document.getElementById('category').value = 'معدات ونقاط';
-            document.getElementById('amount').value = '';
-            document.getElementById('tower_id').value = '';
-            document.getElementById('purchase_date').value = new Date().toISOString().split('T')[0];
-            document.getElementById('notes').value = '';
-            document.getElementById('modal-title').innerText = 'إضافة مصروف أو قطعة جديدة';
-            document.getElementById('purchase-modal').classList.remove('hidden');
-        }
-
-        window.closeModal = function() {
-            document.getElementById('purchase-modal').classList.add('hidden');
-        }
-
-        window.editPurchase = function(id) {
-            let p = purchasesData.find(item => item.id == id);
-            if(!p) return;
-            document.getElementById('edit-id').value = p.id;
-            document.getElementById('item_name').value = p.item_name;
-            document.getElementById('category').value = p.category || 'معدات ونقاط';
-            document.getElementById('amount').value = p.amount;
-            document.getElementById('tower_id').value = p.tower_id || '';
-            document.getElementById('purchase_date').value = p.purchase_date || new Date().toISOString().split('T')[0];
-            document.getElementById('notes').value = p.notes || '';
-            document.getElementById('modal-title').innerText = 'تعديل بيانات المصروف';
-            document.getElementById('purchase-modal').classList.remove('hidden');
-        }
+        window.openModal = () => document.getElementById('purchase-modal').classList.remove('hidden');
+        window.closeModal = () => document.getElementById('purchase-modal').classList.add('hidden');
 
         window.savePurchase = async function() {
-            let id = document.getElementById('edit-id').value;
             let item_name = document.getElementById('item_name').value.trim();
             let category = document.getElementById('category').value;
-            let amount = parseFloat(document.getElementById('amount').value) || 0;
+            let amount = parseFloat(document.getElementById('amount').value);
             let tower_id = document.getElementById('tower_id').value || null;
-            let purchase_date = document.getElementById('purchase_date').value;
             let notes = document.getElementById('notes').value.trim();
 
-            if(!item_name || !amount) {
-                alert("الرجاء إدخال اسم البند وتكلفة المبلغ.");
-                return;
-            }
-
-            try {
-                let payload = { item_name, category, amount, tower_id, purchase_date, notes };
-                if(id) {
-                    let { error } = await supabase.from('purchases').update(payload).eq('id', id);
-                    if(error) throw error;
-                } else {
-                    let { error } = await supabase.from('purchases').insert([payload]);
-                    if(error) throw error;
-                }
-                closeModal();
-                fetchPurchases();
-                alert("تم الحفظ بنجاح!");
-            } catch(err) {
-                alert("حدث خطأ أثناء الحفظ: " + err.message);
-            }
+            if(!item_name || !amount) return alert("أدخل اسم البند والتكلفة");
+            let { error } = await supabase.from('purchases').insert([{ item_name, category, amount, tower_id, notes, purchase_date: new Date().toISOString().split('T')[0] }]);
+            if(error) alert(error.message);
+            else { closeModal(); fetchPurchases(); }
         }
 
         window.deletePurchase = async function(id) {
-            if(!confirm("هل أنت متأكد من حذف هذا المصروف؟")) return;
-            try {
-                let { error } = await supabase.from('purchases').delete().eq('id', id);
-                if(error) throw error;
-                fetchPurchases();
-                alert("تم الحذف بنجاح!");
-            } catch(err) {
-                alert("حدث خطأ أثناء الحذف: " + err.message);
-            }
+            if(!confirm("حذف هذا البند؟")) return;
+            let { error } = await supabase.from('purchases').delete().eq('id', id);
+            if(error) alert(error.message);
+            else fetchPurchases();
         }
 
-        window.exportToCSV = function() {
-            let csv = ["البند,التصنيف,البرج المرتبط,التكلفة,التاريخ,ملاحظات"];
-            purchasesData.forEach(p => {
-                let towerName = p.towers ? p.towers.name : 'مصروف عام';
-                csv.push(`"${p.item_name}","${p.category}","${towerName}","${p.amount}","${p.purchase_date || ''}","${p.notes || ''}"`);
-            });
-            let blob = new Blob(["\uFEFF" + csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "purchases_ledger.csv";
-            link.click();
-        }
-
-        initPage();
+        init();
     </script>
 </body>
 </html>
