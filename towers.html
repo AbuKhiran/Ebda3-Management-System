@@ -37,42 +37,35 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div>
                 <h2 class="text-2xl font-extrabold text-slate-900">الأبراج الرئيسية ونقاط المشتركين</h2>
-                <p class="text-xs text-slate-500 mt-1">إضافة، تعديل، وحذف المواقع مع الترحيل التلقائي للمصاريف العامة</p>
+                <p class="text-xs text-slate-500 mt-1">إضافة، تعديل، وحذف المواقع ونقاط البث</p>
             </div>
             <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> إضافة موقع أو قطعة جديدة
+                <i class="fa-solid fa-plus"></i> إضافة برج أو نقطة جديدة
             </button>
         </div>
 
         <!-- KPI Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">إجمالي المواقع (أبراج ونقاط)</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">إجمالي الأبراج والنقاط</p>
                     <h3 class="text-3xl font-extrabold text-slate-900 mt-2" id="stat-locations">0</h3>
                 </div>
                 <div class="bg-blue-50 text-blue-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-map-pin"></i></div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">عدد القطع والأجهزة</p>
-                    <h3 class="text-3xl font-extrabold text-blue-600 mt-2" id="stat-items">0</h3>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">الأبراج الرئيسية</p>
+                    <h3 class="text-3xl font-extrabold text-purple-600 mt-2" id="stat-main">0</h3>
                 </div>
-                <div class="bg-indigo-50 text-indigo-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-microchip"></i></div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
-                <div>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">إجمالي التكاليف المترتبة</p>
-                    <h3 class="text-3xl font-extrabold text-rose-600 mt-2" id="stat-cost">0 ₪</h3>
-                </div>
-                <div class="bg-rose-50 text-rose-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-wallet"></i></div>
+                <div class="bg-purple-50 text-purple-600 p-4 rounded-2xl text-xl"><i class="fa-solid fa-tower-cell"></i></div>
             </div>
         </div>
 
         <!-- Data Table Section -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 class="font-bold text-slate-800 text-base">سجل الأبراج والمعدات</h3>
+                <h3 class="font-bold text-slate-800 text-base">سجل المواقع والنقاط</h3>
                 <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1">
                     <i class="fa-solid fa-file-excel"></i> تصدير إكسل
                 </button>
@@ -81,12 +74,10 @@
                 <table class="w-full text-right border-collapse text-sm">
                     <thead class="bg-slate-100/70 text-slate-600 text-xs uppercase">
                         <tr>
-                            <th class="p-4">نوع المكان</th>
-                            <th class="p-4">اسم الموقع / البرج</th>
-                            <th class="p-4">اسم القطعة</th>
-                            <th class="p-4">رقم الـ IP</th>
-                            <th class="p-4">التفاصيل / الملاحظات</th>
-                            <th class="p-4">التكلفة</th>
+                            <th class="p-4">نوع الموقع</th>
+                            <th class="p-4">اسم البرج / النقطة</th>
+                            <th class="p-4">رقم الـ IP الأساسي</th>
+                            <th class="p-4">ملاحظات وتفاصيل</th>
                             <th class="p-4 text-center">الإجراءات</th>
                         </tr>
                     </thead>
@@ -101,9 +92,9 @@
 
     <!-- Add / Edit Modal -->
     <div id="tower-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-in">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="modal-title" class="text-lg font-bold text-slate-900">إضافة موقع أو قطعة جديدة</h3>
+                <h3 id="modal-title" class="text-lg font-bold text-slate-900">إضافة برج أو نقطة جديدة</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <input type="hidden" id="edit-id">
@@ -120,22 +111,12 @@
                     <input type="text" id="name" placeholder="مثال: نقطة الرهوة / برج بيت فجار" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                 </div>
                 <div>
-                    <label class="block text-slate-600 font-semibold mb-1">اسم القطعة / الجهاز:</label>
-                    <input type="text" id="item_name" placeholder="مثال: Litebeam / Switch / Router" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-600 font-semibold mb-1">رقم الـ IP:</label>
-                        <input type="text" id="ip_address" placeholder="192.168.50.X" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600 font-semibold mb-1">التكلفة (شيكل):</label>
-                        <input type="number" id="price" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
-                    </div>
+                    <label class="block text-slate-600 font-semibold mb-1">رقم الـ IP الأساسي:</label>
+                    <input type="text" id="ip_address" placeholder="192.168.50.X" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                 </div>
                 <div>
-                    <label class="block text-slate-600 font-semibold mb-1">ملاحظات وتفاصيل إضافية:</label>
-                    <input type="text" id="notes" placeholder="ملاحظات التركيب أو الأجهزة..." class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                    <label class="block text-slate-600 font-semibold mb-1">ملاحظات:</label>
+                    <input type="text" id="notes" placeholder="ملاحظات إضافية..." class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                 </div>
             </div>
             <div class="flex gap-3 pt-3 border-t">
@@ -145,7 +126,7 @@
         </div>
     </div>
 
-    <!-- Application Script Linked with Supabase -->
+    <!-- Application Script Linked with Central Supabase -->
     <script type="module">
         import { supabase } from './assets/js/supabase.js';
 
@@ -159,10 +140,9 @@
                 renderUI();
             } catch (err) {
                 console.error("خطأ في جلب البيانات:", err.message);
-                // استخدام بيانات افتراضية في حال عدم الاتصال المباشر لضمان التجربة الفورية
                 towersData = [
-                    { id: '1', location_type: 'main_tower', name: 'البرج الرئيسي', item_name: 'cpe220', ip_address: '192.168.50.213', hardware_details: 'رئيسي', price: 450 },
-                    { id: '2', location_type: 'sub_point', name: 'نقطة الرهوة', item_name: 'Litebeam M5', ip_address: '192.168.50.201', hardware_details: 'فوق المشتركين', price: 350 }
+                    { id: '1', location_type: 'main_tower', name: 'البرج الرئيسي', ip_address: '192.168.50.213', notes: 'البرج الأساسي' },
+                    { id: '2', location_type: 'sub_point', name: 'نقطة الرهوة', ip_address: '192.168.50.201', notes: 'فوق دور المشتركين' }
                 ];
                 renderUI();
             }
@@ -170,17 +150,15 @@
 
         window.renderUI = function() {
             let tbody = document.getElementById('towers-table-body');
-            let totalCost = 0;
-            let uniqueLocations = new Set();
+            let mainCount = 0;
 
             if (towersData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">لا توجد بيانات مسجلة حالياً.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-400">لا توجد بيانات مسجلة حالياً.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = towersData.map(t => {
-                totalCost += Number(t.price || 0);
-                uniqueLocations.add(t.name);
+                if(t.location_type === 'main_tower') mainCount++;
                 let typeBadge = t.location_type === 'main_tower' 
                     ? '<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">برج رئيسي</span>' 
                     : '<span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold">نقطة مشتركين</span>';
@@ -189,10 +167,8 @@
                     <tr class="hover:bg-slate-50/80 transition">
                         <td class="p-4">${typeBadge}</td>
                         <td class="p-4 font-bold text-slate-900">${t.name}</td>
-                        <td class="p-4">${t.item_name}</td>
                         <td class="p-4 text-slate-600 font-mono text-xs">${t.ip_address || '-'}</td>
-                        <td class="p-4 text-slate-500">${t.hardware_details || t.notes || '-'}</td>
-                        <td class="p-4 font-extrabold text-emerald-600">${Number(t.price).toLocaleString()} ₪</td>
+                        <td class="p-4 text-slate-500">${t.notes || '-'}</td>
                         <td class="p-4 text-center space-x-2 space-x-reverse">
                             <button onclick="editTower('${t.id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deleteTower('${t.id}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-trash"></i></button>
@@ -201,20 +177,17 @@
                 `;
             }).join('');
 
-            document.getElementById('stat-locations').innerText = uniqueLocations.size;
-            document.getElementById('stat-items').innerText = towersData.length;
-            document.getElementById('stat-cost').innerText = totalCost.toLocaleString() + ' ₪';
+            document.getElementById('stat-locations').innerText = towersData.length;
+            document.getElementById('stat-main').innerText = mainCount;
         }
 
-        window.openModal = function(id = null) {
+        window.openModal = function() {
             document.getElementById('edit-id').value = '';
             document.getElementById('location_type').value = 'sub_point';
             document.getElementById('name').value = '';
-            document.getElementById('item_name').value = '';
             document.getElementById('ip_address').value = '';
-            document.getElementById('price').value = '';
             document.getElementById('notes').value = '';
-            document.getElementById('modal-title').innerText = 'إضافة موقع أو قطعة جديدة';
+            document.getElementById('modal-title').innerText = 'إضافة برج أو نقطة جديدة';
             document.getElementById('tower-modal').classList.remove('hidden');
         }
 
@@ -228,10 +201,8 @@
             document.getElementById('edit-id').value = t.id;
             document.getElementById('location_type').value = t.location_type || 'sub_point';
             document.getElementById('name').value = t.name;
-            document.getElementById('item_name').value = t.item_name;
             document.getElementById('ip_address').value = t.ip_address || '';
-            document.getElementById('price').value = t.price;
-            document.getElementById('notes').value = t.hardware_details || t.notes || '';
+            document.getElementById('notes').value = t.notes || '';
             document.getElementById('modal-title').innerText = 'تعديل بيانات الموقع';
             document.getElementById('tower-modal').classList.remove('hidden');
         }
@@ -240,36 +211,32 @@
             let id = document.getElementById('edit-id').value;
             let location_type = document.getElementById('location_type').value;
             let name = document.getElementById('name').value.trim();
-            let item_name = document.getElementById('item_name').value.trim();
             let ip_address = document.getElementById('ip_address').value.trim();
-            let price = parseFloat(document.getElementById('price').value) || 0;
             let notes = document.getElementById('notes').value.trim();
 
-            if(!name || !item_name) {
-                alert("الرجاء تعبئة اسم الموقع واسم القطعة على الأقل.");
+            if(!name) {
+                alert("الرجاء إدخال اسم الموقع أو البرج.");
                 return;
             }
 
             try {
                 if(id) {
-                    // تعديل
-                    let { error } = await supabase.from('towers').update({ location_type, name, item_name, ip_address, price, hardware_details: notes }).eq('id', id);
+                    let { error } = await supabase.from('towers').update({ location_type, name, ip_address, notes }).eq('id', id);
                     if(error) throw error;
                 } else {
-                    // إضافة جديدة (تتصل مع قاعدة البيانات وترحل تلقائياً للمصاريف عبر الـ Trigger الذي أنشأناه سابقاً)
-                    let { error } = await supabase.from('towers').insert([{ location_type, name, item_name, ip_address, price, hardware_details: notes }]);
+                    let { error } = await supabase.from('towers').insert([{ location_type, name, ip_address, notes }]);
                     if(error) throw error;
                 }
                 closeModal();
                 fetchTowers();
                 alert("تم الحفظ بنجاح!");
             } catch(err) {
-                alert("حدث خطأ أثناء حفظ البيانات: " + err.message);
+                alert("حدث خطأ أثناء الحفظ: " + err.message);
             }
         }
 
         window.deleteTower = async function(id) {
-            if(!confirm("هل أنت متأكد من حذف هذا العنصر؟")) return;
+            if(!confirm("هل أنت متأكد من حذف هذا الموقع؟")) return;
             try {
                 let { error } = await supabase.from('towers').delete().eq('id', id);
                 if(error) throw error;
@@ -281,19 +248,18 @@
         }
 
         window.exportToCSV = function() {
-            let csv = ["نوع الموقع,اسم الموقع,القطعة,IP,التفاصيل,التكلفة"];
+            let csv = ["نوع الموقع,اسم الموقع,IP,ملاحظات"];
             towersData.forEach(t => {
                 let typeName = t.location_type === 'main_tower' ? 'برج رئيسي' : 'نقطة مشتركين';
-                csv.push(`"${typeName}","${t.name}","${t.item_name}","${t.ip_address || ''}","${t.hardware_details || t.notes || ''}","${t.price}"`);
+                csv.push(`"${typeName}","${t.name}","${t.ip_address || ''}","${t.notes || ''}"`);
             });
             let blob = new Blob(["\uFEFF" + csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "towers_management.csv";
+            link.download = "towers_list.csv";
             link.click();
         }
 
-        // جلب البيانات عند فتح الصفحة
         fetchTowers();
     </script>
 </body>
