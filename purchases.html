@@ -17,7 +17,7 @@
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl font-bold text-lg shadow"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                 <div>
                     <h1 class="text-lg font-bold">شبكة إبداع للاتصالات</h1>
-                    <p class="text-xs text-slate-400">إدارة المصروفات وربط القطع</p>
+                    <p class="text-xs text-slate-400">إدارة المصروفات وربط القطع وتعديلها</p>
                 </div>
             </div>
             <a href="towers.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
@@ -30,10 +30,10 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div>
                 <h2 class="text-2xl font-extrabold text-slate-900">سجل القطع والمصروفات</h2>
-                <p class="text-xs text-slate-500 mt-1">ربط كل قطعة ببرج واحد فقط</p>
+                <p class="text-xs text-slate-500 mt-1">إضافة، تعديل، وحذف بنود المشتريات والمصاريف وربطها بالأبراج</p>
             </div>
             <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> إضافة قطعة أو مصروف
+                <i class="fa-solid fa-plus"></i> إضافة قطعة أو مصروف جديد
             </button>
         </div>
 
@@ -48,7 +48,7 @@
                             <th class="p-4">التكلفة</th>
                             <th class="p-4">التاريخ</th>
                             <th class="p-4">ملاحظات</th>
-                            <th class="p-4 text-center">إجراء</th>
+                            <th class="p-4 text-center">الإجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="purchases-table-body" class="divide-y divide-slate-100"></tbody>
@@ -60,7 +60,7 @@
     <!-- Modal -->
     <div id="purchase-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <h3 class="text-lg font-bold text-slate-900 border-b pb-3">إضافة بند جديد</h3>
+            <h3 id="modal-title" class="text-lg font-bold text-slate-900 border-b pb-3">إضافة بند جديد</h3>
             <div class="space-y-3 text-sm">
                 <input type="hidden" id="edit-id">
                 <div>
@@ -102,6 +102,8 @@
     <script type="module">
         import { supabase } from './assets/js/supabase.js';
 
+        let purchasesList = [];
+
         async function init() {
             let { data: towers } = await supabase.from('towers').select('id, name');
             if(towers) {
@@ -113,12 +115,15 @@
 
         async function fetchPurchases() {
             let { data, error } = await supabase.from('purchases').select('*, towers(name)').order('purchase_date', { ascending: false });
+            purchasesList = data || [];
             let tbody = document.getElementById('purchases-table-body');
-            if(!data || data.length === 0) {
+            
+            if(purchasesList.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">لا توجد مصروفات مسجلة.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = data.map(p => `
+
+            tbody.innerHTML = purchasesList.map(p => `
                 <tr class="hover:bg-slate-50">
                     <td class="p-4 font-bold">${p.item_name}</td>
                     <td class="p-4 text-xs"><span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded">${p.category}</span></td>
@@ -126,15 +131,44 @@
                     <td class="p-4 font-extrabold text-rose-600">${p.amount} ₪</td>
                     <td class="p-4 text-xs text-slate-500">${p.purchase_date}</td>
                     <td class="p-4 text-xs text-slate-500">${p.notes || '-'}</td>
-                    <td class="p-4 text-center"><button onclick="deletePurchase('${p.id}')" class="bg-rose-50 text-rose-600 px-3 py-1 rounded text-xs font-semibold">حذف</button></td>
+                    <td class="p-4 text-center space-x-2 space-x-reverse">
+                        <button onclick="editPurchase('${p.id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded text-xs font-semibold"><i class="fa-solid fa-pen"></i> تعديل</button>
+                        <button onclick="deletePurchase('${p.id}')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-1 rounded text-xs font-semibold"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </td>
                 </tr>
             `).join('');
         }
 
-        window.openModal = () => document.getElementById('purchase-modal').classList.remove('hidden');
-        window.closeModal = () => document.getElementById('purchase-modal').classList.add('hidden');
+        window.openModal = function() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('item_name').value = '';
+            document.getElementById('category').value = 'معدات ونقاط';
+            document.getElementById('amount').value = '';
+            document.getElementById('tower_id').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('modal-title').innerText = 'إضافة بند أو قطعة جديدة';
+            document.getElementById('purchase-modal').classList.remove('hidden');
+        }
+
+        window.closeModal = function() {
+            document.getElementById('purchase-modal').classList.add('hidden');
+        }
+
+        window.editPurchase = function(id) {
+            let p = purchasesList.find(item => item.id == id);
+            if(!p) return;
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('item_name').value = p.item_name;
+            document.getElementById('category').value = p.category;
+            document.getElementById('amount').value = p.amount;
+            document.getElementById('tower_id').value = p.tower_id || '';
+            document.getElementById('notes').value = p.notes || '';
+            document.getElementById('modal-title').innerText = 'تعديل بيانات المصروف / القطعة';
+            document.getElementById('purchase-modal').classList.remove('hidden');
+        }
 
         window.savePurchase = async function() {
+            let id = document.getElementById('edit-id').value;
             let item_name = document.getElementById('item_name').value.trim();
             let category = document.getElementById('category').value;
             let amount = parseFloat(document.getElementById('amount').value);
@@ -142,13 +176,25 @@
             let notes = document.getElementById('notes').value.trim();
 
             if(!item_name || !amount) return alert("أدخل اسم البند والتكلفة");
-            let { error } = await supabase.from('purchases').insert([{ item_name, category, amount, tower_id, notes, purchase_date: new Date().toISOString().split('T')[0] }]);
-            if(error) alert(error.message);
+
+            let payload = { item_name, category, amount, tower_id, notes };
+            let res;
+
+            if(id) {
+                // تعديل بند موجود
+                res = await supabase.from('purchases').update(payload).eq('id', id);
+            } else {
+                // إضافة بند جديد
+                payload.purchase_date = new Date().toISOString().split('T')[0];
+                res = await supabase.from('purchases').insert([payload]);
+            }
+
+            if(res.error) alert(res.error.message);
             else { closeModal(); fetchPurchases(); }
         }
 
         window.deletePurchase = async function(id) {
-            if(!confirm("حذف هذا البند؟")) return;
+            if(!confirm("هل أنت متأكد من حذف هذا البند؟")) return;
             let { error } = await supabase.from('purchases').delete().eq('id', id);
             if(error) alert(error.message);
             else fetchPurchases();
