@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة الأبراج - شبكة إبداع</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 p-6">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow">
+        <h1 class="text-xl font-bold mb-4">قائمة الأبراج من قاعدة البيانات</h1>
+        <button onclick="loadTowers()" class="bg-blue-600 text-white px-4 py-2 rounded-xl mb-4">جلب الأبراج من Supabase</button>
+        <div id="data-container"></div>
+    </div>
+
+    <!-- استدعاء ملف الجافاسكريبت الخاص بالصفحة كـ Module للربط مع Supabase -->
+    <script type="module">
+        // استيراد عميل Supabase المركزي الذي أنشأناه في الخطوة الأولى
+        import { supabase } from './assets/js/supabase.js';
+
+        // جعل دالة الجلب عامة للاستخدام في الزر
+        window.loadTowers = async function() {
+            try {
+                let { data: towers, error } = await supabase
+                    .from('towers')
+                    .select('*');
+
+                if (error) throw error;
+
+                let container = document.getElementById('data-container');
+                if(towers.length === 0) {
+                    container.innerHTML = `<p class="text-slate-500">لا توجد بيانات مسجلة حالياً.</p>`;
+                    return;
+                }
+
+                container.innerHTML = towers.map(t => `
+                    <div class="border-b py-2 flex justify-between">
+                        <span><strong>${t.name}</strong> (${t.item_name})</span>
+                        <span class="text-emerald-600 font-bold">${t.price} ₪</span>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                alert("حدث خطأ أثناء الاتصال بقاعدة البيانات: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
