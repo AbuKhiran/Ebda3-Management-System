@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تيكاليف الأبراج والمعدات - شبكة إبداع</title>
+    <title>تكاليف الأبراج والمعدات - شبكة إبداع</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -11,67 +11,57 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header Navigation -->
     <header class="bg-slate-900 text-white shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="bg-blue-600 text-white p-2.5 rounded-xl font-bold text-lg shadow"><i class="fa-solid fa-tower-broadcast"></i></div>
                 <div>
                     <h1 class="text-lg font-bold">شبكة إبداع للاتصالات</h1>
-                    <p class="text-xs text-slate-400">حساب تكاليف الأبراج والقطع المربوطة</p>
+                    <p class="text-xs text-slate-400">إدارة الأبراج وحساب التكاليف</p>
                 </div>
             </div>
             <div class="flex gap-2">
                 <a href="purchases.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
                     <i class="fa-solid fa-cart-shopping ml-1"></i> القطع والمصروفات
                 </a>
-                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-semibold transition border border-slate-700">
-                    <i class="fa-solid fa-arrow-right ml-1"></i> الرئيسية
-                </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
     <main class="container mx-auto px-6 py-8 flex-grow space-y-8">
-        
-        <!-- Top Title Bar -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div>
-                <h2 class="text-2xl font-extrabold text-slate-900">تكلفة الأبراج ونقاط البث (حسب القطع المربوطة)</h2>
-                <p class="text-xs text-slate-500 mt-1">كل قطعة ترتبط ببرج واحد فقط ولا تكرر في مكان آخر</p>
+                <h2 class="text-2xl font-extrabold text-slate-900">الأبراج ونقاط البث وتكاليفها</h2>
+                <p class="text-xs text-slate-500 mt-1">عند حذف أي برج يتم فك ربط القطع التابعة له تلقائياً وإعادتها للمخزن</p>
             </div>
             <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm flex items-center gap-2">
                 <i class="fa-solid fa-plus"></i> إضافة برج / نقطة جديدة
             </button>
         </div>
 
-        <!-- Cards View (Tower Cost Summary) -->
         <div id="towers-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- يمتلئ ديناميكياً بكروت الأبراج وتكاليفها -->
+            <!-- تملأ ديناميكياً -->
         </div>
-
     </main>
 
-    <!-- Add / Edit Modal -->
+    <!-- Modal -->
     <div id="tower-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="modal-title" class="text-lg font-bold text-slate-900">إضافة برج أو نقطة جديدة</h3>
+                <h3 class="text-lg font-bold text-slate-900">إضافة برج أو نقطة جديدة</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <input type="hidden" id="edit-id">
             <div class="space-y-4 text-sm">
                 <div>
                     <label class="block text-slate-600 font-semibold mb-1">نوع الموقع:</label>
-                    <select id="location_type" class="w-full border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 bg-slate-50/50">
+                    <select id="location_type" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                         <option value="sub_point">نقطة مشتركين (مجمع فوق دور المشتركين)</option>
                         <option value="main_tower">برج رئيسي للشبكة</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-slate-600 font-semibold mb-1">اسم البرج أو النقطة:</label>
-                    <input type="text" id="name" placeholder="مثال: نقطة الرهوة / برج بيت فجار" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                    <input type="text" id="name" placeholder="مثال: نقطة الرهوة" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                 </div>
                 <div>
                     <label class="block text-slate-600 font-semibold mb-1">رقم الـ IP الأساسي:</label>
@@ -79,34 +69,30 @@
                 </div>
                 <div>
                     <label class="block text-slate-600 font-semibold mb-1">ملاحظات:</label>
-                    <input type="text" id="notes" placeholder="ملاحظات إضافية..." class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+                    <input type="text" id="notes" placeholder="ملاحظات..." class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50/50">
                 </div>
             </div>
             <div class="flex gap-3 pt-3 border-t">
-                <button onclick="saveTower()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow">حفظ البيانات</button>
+                <button onclick="saveTower()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow">حفظ</button>
                 <button onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold text-sm transition">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- Script Logic -->
     <script type="module">
         import { supabase } from './assets/js/supabase.js';
 
         let towersData = [];
 
-        async function fetchTowersWithCosts() {
+        async function fetchTowers() {
             try {
-                // استعلام يجلب الأبراج ومجموع تكاليف القطع المربوطة بها حصرياً
                 let { data, error } = await supabase.from('tower_costs_summary').select('*');
                 if (error) throw error;
                 towersData = data || [];
                 renderCards();
             } catch (err) {
-                console.error("جاري عرض بيانات توضيحية للاختبار:", err.message);
                 towersData = [
-                    { tower_id: '1', tower_name: 'البرج الرئيسي', location_type: 'main_tower', ip_address: '192.168.50.213', total_items_count: 3, total_tower_cost: 1900 },
-                    { tower_id: '2', tower_name: 'نقطة الرهوة', location_type: 'sub_point', ip_address: '192.168.50.201', total_items_count: 2, total_tower_cost: 470 }
+                    { tower_id: '1', tower_name: 'البرج الرئيسي', location_type: 'main_tower', ip_address: '192.168.50.213', total_items_count: 2, total_tower_cost: 1500 }
                 ];
                 renderCards();
             }
@@ -115,7 +101,7 @@
         function renderCards() {
             let container = document.getElementById('towers-cards-container');
             if(towersData.length === 0) {
-                container.innerHTML = `<div class="col-span-3 text-center p-8 bg-white rounded-2xl text-slate-400">لا توجد أبراج مسجلة حالياً.</div>`;
+                container.innerHTML = `<div class="col-span-3 text-center p-8 bg-white rounded-2xl text-slate-400">لا توجد أبراج مسجلة.</div>`;
                 return;
             }
 
@@ -125,7 +111,7 @@
                     : '<span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full font-bold">نقطة مشتركين</span>';
 
                 return `
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-4 hover:shadow-md transition">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-4">
                         <div class="flex justify-between items-start border-b pb-3">
                             <div>
                                 <h3 class="font-bold text-lg text-slate-900">${t.tower_name}</h3>
@@ -134,30 +120,21 @@
                             ${badge}
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-slate-500">عدد القطع المربوطة:</span>
-                            <span class="font-bold bg-slate-100 px-2.5 py-1 rounded-lg text-slate-800">${t.total_items_count} قطع</span>
+                            <span class="text-slate-500">القطع المرتبطة:</span>
+                            <span class="font-bold bg-slate-100 px-2.5 py-1 rounded-lg">${t.total_items_count} قطع</span>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl flex justify-between items-center">
-                            <span class="text-xs font-semibold text-slate-500">إجمالي تكلفة البرج:</span>
+                            <span class="text-xs font-semibold text-slate-500">التكلفة الإجمالية:</span>
                             <span class="text-xl font-extrabold text-rose-600">${Number(t.total_tower_cost).toLocaleString()} ₪</span>
                         </div>
+                        <button onclick="deleteTower('${t.tower_id}')" class="w-full bg-rose-50 text-rose-600 hover:bg-rose-100 py-2 rounded-xl text-xs font-semibold transition">حذف البرج (وفك ربط قطعه)</button>
                     </div>
                 `;
             }).join('');
         }
 
-        window.openModal = function() {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('location_type').value = 'sub_point';
-            document.getElementById('name').value = '';
-            document.getElementById('ip_address').value = '';
-            document.getElementById('notes').value = '';
-            document.getElementById('tower-modal').classList.remove('hidden');
-        }
-
-        window.closeModal = function() {
-            document.getElementById('tower-modal').classList.add('hidden');
-        }
+        window.openModal = () => document.getElementById('tower-modal').classList.remove('hidden');
+        window.closeModal = () => document.getElementById('tower-modal').classList.add('hidden');
 
         window.saveTower = async function() {
             let location_type = document.getElementById('location_type').value;
@@ -165,23 +142,20 @@
             let ip_address = document.getElementById('ip_address').value.trim();
             let notes = document.getElementById('notes').value.trim();
 
-            if(!name) {
-                alert("الرجاء إدخال اسم البرج أو النقطة.");
-                return;
-            }
-
-            try {
-                let { error } = await supabase.from('towers').insert([{ location_type, name, ip_address, notes }]);
-                if(error) throw error;
-                closeModal();
-                fetchTowersWithCosts();
-                alert("تم التعديل/الإضافة بنجاح!");
-            } catch(err) {
-                alert("حدث خطأ: " + err.message);
-            }
+            if(!name) return alert("أدخل اسم البرج");
+            let { error } = await supabase.from('towers').insert([{ location_type, name, ip_address, notes }]);
+            if(error) alert(error.message);
+            else { closeModal(); fetchTowers(); }
         }
 
-        fetchTowersWithCosts();
+        window.deleteTower = async function(id) {
+            if(!confirm("حذف البرج سيؤدي لفك ارتباط جميع قطعه تلقائياً. هل أنت متأكد؟")) return;
+            let { error } = await supabase.from('towers').delete().eq('id', id);
+            if(error) alert(error.message);
+            else fetchTowers();
+        }
+
+        fetchTowers();
     </script>
 </body>
 </html>
